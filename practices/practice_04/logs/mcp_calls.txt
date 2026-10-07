@@ -1,0 +1,19 @@
+Initialize:
+{"jsonrpc":"2.0","id":1,"method":"initialize"}
+Response:
+{"jsonrpc": "2.0", "id": 1, "result": {"protocolVersion": "2024-11-05", "serverName": "ai-checker", "serverVersion": "0.1.0", "tools": [{"name": "get_stats", "description": "Counts words per level", "inputSchema": {"type": "object", "properties": {}}}, {"name": "validate_level", "description": "Validate CEFR level exists", "inputSchema": {"type": "object", "properties": {"level": {"type": "string"}}, "required": ["level"]}}]}}
+
+Success call (get_stats):
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_stats","arguments":{}}}
+Response:
+{"jsonrpc": "2.0", "id": 2, "result": {"content": [{"type": "text", "text": "{\"A1\": 5, \"A2\": 4, \"B1\": 4, \"B2\": 4, \"C1\": 4, \"C2\": 4}"}], "isError": false}}
+
+Success call (validate_level=B1):
+{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"validate_level","arguments":{"level":"B1"}}}
+Response:
+{"jsonrpc": "2.0", "id": 3, "result": {"content": [{"type": "text", "text": "ok"}], "isError": false}}
+
+Error call (validate_level=ZZ):
+{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"validate_level","arguments":{"level":"ZZ"}}}
+Response:
+{"jsonrpc": "2.0", "id": 4, "result": {"content": [{"type": "text", "text": "unknown_level:ZZ"}], "isError": true}}

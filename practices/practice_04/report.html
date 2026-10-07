@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Практика 4 — Отчёт</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; line-height: 1.5; }
+    code, pre { background: #f6f8fa; padding: 2px 4px; border-radius: 4px; }
+    pre { padding: 12px; overflow: auto; }
+    h1, h2, h3 { margin-top: 1.6em; }
+    .ok { color: #1a7f37 }
+    .bad { color: #b54708 }
+    .muted { color: #57606a }
+    a { color: #0969da; text-decoration: none; }
+  </style>
+  </head>
+  <body>
+  <h1>Практика 4: среда агента, skill и MCP</h1>
+
+  <h2>1. Настройка среды и применение</h2>
+  <p>Добавлены правила <a href="../../AGENTS.md">AGENTS.md</a>, конфиг <code>.opencode/opencode.json</code>, skill <code>ai-app-smoke</code>, локальный MCP <code>ai-checker</code> и плагин авто‑проверок.</p>
+  <ul>
+    <li>AGENTS.md: правила, ссылки на эндпоинты и источники данных.</li>
+    <li>opencode.json: загрузка AGENTS.md, skill, MCP и плагина.</li>
+    <li>auto-check.js: после правки выполняет <code>python -m py_compile</code> для модулей бэкенда и сохраняет логи.</li>
+    <li>ai-checker (MCP): предоставляет tool'ы <code>get_stats</code> и <code>validate_level</code>.</li>
+  </ul>
+  <p class="muted">Обоснование подключений: AGENTS.md — единые правила; skill — быстрый smoke для API; MCP — удобная статистика датасета и валидация уровня; плагин — раннее выявление синтаксических ошибок после правок.</p>
+
+  <h2>2. Skill: ai-app-smoke</h2>
+  <p>Skill автоматизирует проверку здоровья и выборки квиза. Содержит пошаговые команды запуска и негативный тест, требует сохранять артефакты в <code>practices/practice_04/logs/</code>. Результаты запусков подтверждены логами smoke.</p>
+  <pre>См. файл: .opencode/skills/ai-app-smoke/SKILL.md</pre>
+
+  <h2>3. Собственный MCP: ai-checker</h2>
+  <p>Реализован сервер JSON‑RPC поверх stdio на Python (<code>.opencode/mcp/ai-checker/server.py</code>).</p>
+  <ul>
+    <li><code>get_stats</code> — количество слов на каждом уровне из <code>ai_app/backend/data/words.json</code>.</li>
+    <li><code>validate_level</code> — успех на корректном уровне и сигнал <code>isError=true</code> на ошибочном.</li>
+  </ul>
+  <p>Подтверждения вызовов (успешный и ошибочный) в <a href="logs/mcp_calls.txt">logs/mcp_calls.txt</a>.</p>
+
+  <h2>4. Автоматическая проверка</h2>
+  <p>Плагин <code>auto-check.js</code> создаёт лог‑артефакт после правок. Пример артефакта smoke‑запуска:</p>
+  <pre><code id="smoke">HEALTH 200 {"status":"ok"}
+QUIZ_OK 200 len=643
+QUIZ_BAD_LEVEL HTTP Error 400: Bad Request
+</code></pre>
+
+  <h2>5. Рефлексия</h2>
+  <p>См. <a href="reflection.md">reflection.md</a>.</p>
+
+  <h2>6. Самооценка (10‑балльная шкала)</h2>
+  <ul>
+    <li>AGENTS.md, skill, MCP, hook/runner и обоснование подключений — 5/5</li>
+    <li>Skill: устройство/автоматизация — 1/1; запуск и проверенный результат — 1/1</li>
+    <li>Собственный MCP: полезный tool — 1/1; вызовы (вкл. ошибочный) — 1/1</li>
+    <li>Рефлексия с наблюдениями — 1/1</li>
+  </ul>
+  <p><strong>Итого: 10/10</strong></p>
+
+  <h2>Приложения</h2>
+  <ul>
+    <li><a href="../../AGENTS.md">AGENTS.md</a></li>
+    <li><a href="../../.opencode/opencode.json">.opencode/opencode.json</a></li>
+    <li><a href="../../.opencode/skills/ai-app-smoke/SKILL.md">ai-app-smoke</a></li>
+    <li><a href="../../.opencode/mcp/ai-checker/server.py">ai-checker MCP</a></li>
+    <li><a href="logs/mcp_calls.txt">Логи MCP вызовов</a></li>
+  </ul>
+  </body>
+  </html>
