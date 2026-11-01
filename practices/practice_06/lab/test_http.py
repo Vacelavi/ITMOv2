@@ -48,9 +48,27 @@ class HttpTest(unittest.TestCase):
         self.assertEqual(json.loads(body)["price"], 5000)
 
     def test_health_and_not_found(self):
-        status, _, body = self.call("GET", "/health")
+        status, headers, body = self.call("GET", "/health")
         self.assertEqual((status, json.loads(body)), (200, {"status": "ok"}))
+        self.assertEqual(headers["Cache-Control"], "no-store")
+        self.assertEqual(headers["X-Content-Type-Options"], "nosniff")
+        self.assertIn("default-src 'none'", headers["Content-Security-Policy"])
         self.assertEqual(self.call("GET", "/missing")[0], 404)
+
+    def test_invalid_json_returns_a_stable_error(self):
+        request = Request(
+            self.base + "/login",
+            data=b"{",
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            response = urlopen(request, timeout=5)
+        except HTTPError as exc:
+            response = exc
+        with response:
+            self.assertEqual(response.status, 400)
+            self.assertEqual(json.loads(response.read()), {"error": "invalid JSON"})
 
     def test_transport_only_binds_loopback(self):
         self.assertEqual(self.server.server_address[0], "127.0.0.1")
