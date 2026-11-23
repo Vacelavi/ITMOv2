@@ -1,6 +1,6 @@
 # Результаты клиентских проверок
 
-Дата запуска: 22 ноября 2026 года.
+Дата запуска: 23 ноября 2026 года.
 
 ## Тесты
 
@@ -18,10 +18,29 @@ RUN  v5.0.5 frontend
 
 Test Files  4 passed (4)
 Tests       25 passed (25)
-Duration    2.47s
+Duration    2.92s
 ```
 
 Ожидаемое сообщение `Invalid GameResult payload; safe fallbacks were applied.` создаётся тестом повреждённого результата и подтверждает работу безопасных fallback-значений.
+
+## Скриншот-тесты
+
+Команда:
+
+```bash
+cd frontend
+npm run test:visual -- --reporter=dot
+```
+
+Вывод:
+
+```text
+Running 14 tests using 8 workers
+··············
+14 passed (8.7s)
+```
+
+Playwright сравнил семь состояний интерфейса в desktop- и mobile-размерах с 14 эталонными PNG. Проверены каталог, диалог описания, загрузка, пустой каталог, ошибка, доска Го и результат партии. Эталоны лежат в `frontend/visual-tests/boardroom.visual.spec.js-snapshots/`.
 
 ## Production-сборка
 
@@ -37,7 +56,7 @@ npm run build
 ```text
 vite v8.3.5 building client environment for production...
 ✓ 2367 modules transformed.
-✓ built in 421ms
+✓ built in 592ms
 ```
 
 ## Соответствие пунктам 7–9
@@ -50,4 +69,5 @@ vite v8.3.5 building client environment for production...
 | Повторная отправка | Два submit-события создают только один `GET /api/games/go` |
 | Полный сценарий | Каталог → Го → доска → два паса → результат → новая партия → каталог |
 | Игровая логика | Результаты всех игр, захват в Го, некорректный ход, шахматные подсказки |
+| Визуальная регрессия | 7 состояний × desktop/mobile: 14 сравнений с эталонными PNG |
 

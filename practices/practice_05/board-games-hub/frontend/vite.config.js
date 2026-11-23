@@ -14,6 +14,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.js',
     css: true,
+    exclude: ['visual-tests/**', 'node_modules/**'],
   },
   server: {
     proxy: {

@@ -78,9 +78,24 @@ npm run dev
 
 ## Клиентские тесты
 
+Функциональные компонентные и интеграционные тесты:
+
 ```bash
 cd frontend
 npm test
+```
+
+Скриншот-тесты в Chromium:
+
+```bash
+npx playwright install chromium  # один раз после npm install
+npm run test:visual
+```
+
+Все клиентские проверки одной командой:
+
+```bash
+npm run test:all
 ```
 
 Production-сборка:
@@ -102,7 +117,11 @@ npm run build
 
 Дополнительно сохранены отдельные тесты игровой логики, результата партии, управления доской Го с клавиатуры и подсказок шахматных ходов.
 
-Последний подтверждённый результат: **4 test files, 25 tests passed**. Полный отчёт сохранён в [docs/TEST_RESULTS.md](docs/TEST_RESULTS.md).
+Скриншот-тесты Playwright проверяют семь состояний — каталог, диалог описания, загрузку, пустой ответ, ошибку, доску Го и результат — в двух размерах экрана: desktop 1440×1000 и mobile 390×844. Всего сохранено 14 эталонных PNG в [`frontend/visual-tests/boardroom.visual.spec.js-snapshots`](frontend/visual-tests/boardroom.visual.spec.js-snapshots). Тестовый сценарий находится в [`frontend/visual-tests/boardroom.visual.spec.js`](frontend/visual-tests/boardroom.visual.spec.js), настройки сравнения — в [`frontend/playwright.config.js`](frontend/playwright.config.js).
+
+После намеренного изменения интерфейса эталоны обновляются командой `npm run test:visual:update`. Получившиеся PNG нужно просмотреть перед commit; при обычной проверке используется только `npm run test:visual`, чтобы неожиданное визуальное отличие привело к падению теста.
+
+Последний подтверждённый результат: **25 функциональных тестов и 14 скриншот-тестов прошли**. Полный отчёт сохранён в [docs/TEST_RESULTS.md](docs/TEST_RESULTS.md).
 
 ## Демонстрация состояний
 
@@ -124,7 +143,21 @@ npm run build
 - сохранённый результат тестов и сборки — [docs/TEST_RESULTS.md](docs/TEST_RESULTS.md);
 - описание использования AI и примеры промптов — [docs/AI_USAGE.md](docs/AI_USAGE.md);
 - клиентские тесты — `frontend/src/__tests__/`;
+- скриншот-тесты и эталоны — `frontend/visual-tests/`;
 - скриншоты — `docs/screenshots/`.
+
+### «Что подготовить для сдачи»: что и где находится
+
+| Пункт из задания | Что подготовлено | Где находится |
+|---|---|---|
+| **1. Ссылка на репозиторий с исходным кодом frontend и клиентскими тестами** | Ссылка на репозиторий и будущая прямая ссылка на папку проекта. В проекте находятся 25 функциональных и 14 скриншот-тестов. | Репозиторий: <https://github.com/Vacelavi/ITMOv2>. Проект: `practices/practice_05/board-games-hub/`. Frontend: [`frontend/src`](frontend/src). Функциональные тесты: [`frontend/src/__tests__`](frontend/src/__tests__). Скриншот-тесты: [`frontend/visual-tests`](frontend/visual-tests). Ссылка на папку заработает после commit и push. |
+| **2. README с установкой, запуском, тестами, настройками и названием библиотеки** | Команды backend/frontend, установка зависимостей, запуск тестов и сборки, адреса приложения, настройки, API, отсутствие обязательных секретов и название shadcn/ui. | Этот файл — [`README.md`](README.md), разделы «Запуск», «API», «Дизайн-система» и «Клиентские тесты». Зависимости frontend: [`frontend/package.json`](frontend/package.json). Зависимости backend: [`backend/requirements.txt`](backend/requirements.txt). |
+| **3. Ссылка на макет или прототип либо его экспорт** | Ссылка на опубликованный интерактивный макет v0 и исходный диалог v0. | Макет: <https://boardroom-ten-psi.vercel.app/>. Диалог v0: <https://v0.app/vacelavi-2177/chat/ro7ljua3oIc>. Также ссылки продублированы в [`docs/SUBMISSION.md`](docs/SUBMISSION.md). |
+| **4. Описание основного сценария и скриншоты загрузки, пустых данных и ошибки** | Сценарий описан пошагово. Подготовлены изображения каталога, загрузки, пустого ответа, ошибки, доски Го и результата. | Сценарий: раздел «Основной сценарий» выше и [`docs/SUBMISSION.md`](docs/SUBMISSION.md). Скриншоты: [`docs/screenshots`](docs/screenshots), в том числе [`loading.png`](docs/screenshots/loading.png), [`empty.png`](docs/screenshots/empty.png), [`error.png`](docs/screenshots/error.png), [`catalog.png`](docs/screenshots/catalog.png), [`go-board.png`](docs/screenshots/go-board.png), [`result.png`](docs/screenshots/result.png). |
+| **5. Результат запуска всех клиентских тестов или успешный CI** | Сохранены команды и итоги 25 функциональных и 14 скриншот-тестов, соответствие пунктам 7–9 и результат production-сборки. | [`docs/TEST_RESULTS.md`](docs/TEST_RESULTS.md). Функциональные тесты: [`frontend/src/__tests__`](frontend/src/__tests__). Скриншот-тесты: [`frontend/visual-tests`](frontend/visual-tests). |
+| **6. Описание использования AI: инструменты, запросы и исправления** | Перечислены v0, Codex, Vitest, Testing Library и Playwright; приведены запросы для макета, реализации и тестов; описаны исправления API, доступности, Го и нард. | [`docs/AI_USAGE.md`](docs/AI_USAGE.md). |
+
+Та же информация в формате короткого чек-листа для ревьювера находится в [`docs/SUBMISSION.md`](docs/SUBMISSION.md).
 
 ## Публикация
 
